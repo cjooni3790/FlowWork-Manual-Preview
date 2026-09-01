@@ -1,0 +1,22 @@
+.collect-stage{position:relative;height:calc(100% - 65px);display:grid;grid-template-columns:minmax(0,1fr) 390px;overflow:hidden;background:#0b151b;border:1px solid #253945;border-radius:16px;box-shadow:var(--shadow)}
+.collect-visual{position:relative;display:grid;grid-template-rows:auto minmax(0,1fr) auto;min-width:0;background:#020609}
+.collect-toolbar{display:flex;gap:7px;padding:12px 14px;background:#0d1920;border-bottom:1px solid #243740;overflow:auto}
+.collect-toolbar button{flex:0 0 auto;padding:9px 13px;color:#9eb0b9;background:#15242c;border:1px solid #30444f;border-radius:20px;cursor:pointer;font-size:12px;font-weight:800}
+.collect-toolbar button:hover,.collect-toolbar button.active{color:#092029;background:var(--cyan);border-color:var(--cyan)}
+.collect-image-wrap{position:relative;min-height:0;overflow:hidden}
+.collect-image-wrap>img{display:block;width:100%;height:100%;object-fit:contain}
+.collect-mark{display:none;position:absolute;z-index:2;border:3px solid var(--cyan);background:rgba(82,213,223,.12);filter:drop-shadow(0 0 12px rgba(82,213,223,.35));pointer-events:none}
+.collect-mark.active{display:block;animation:mark-in .3s ease-out}
+.collect-mark span{position:absolute;left:50%;top:-30px;transform:translateX(-50%);white-space:nowrap;padding:5px 8px;color:#092029;background:var(--cyan);border-radius:4px;font-size:10px;font-weight:900}
+.mark-pipe{left:38%;top:43%;width:40%;height:22%;clip-path:polygon(0 46%,100% 0,100% 16%,0 63%);background:var(--cyan);border:0}
+.mark-name{left:44%;top:36%;width:24%;height:12%;border-color:var(--lime)}.mark-name span{background:var(--lime)}
+.mark-ground,.mark-invert{width:11%;aspect-ratio:1;border-radius:50%}.ground-up{left:34%;top:29%;border-color:#ffd35d}.ground-down{left:73%;top:46%;border-color:#ffd35d}.mark-ground span{background:#ffd35d}.invert-up{left:32%;top:45%;border-color:#ff9c55}.invert-down{left:72%;top:58%;border-color:#ff9c55}.mark-invert span{background:#ff9c55}
+.mark-spec{left:46%;top:49%;width:29%;height:15%;border-color:#68a9ff}.mark-spec span{background:#68a9ff}
+.collection-chain{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:#0d1920;border-top:1px solid #243740;overflow:auto}
+.collection-chain span{display:flex;align-items:center;gap:6px;white-space:nowrap;color:#b6c4ca;font-size:11px;font-weight:700}.collection-chain b{display:grid;place-items:center;width:20px;height:20px;color:#092029;background:var(--cyan);border-radius:50%;font-size:10px}.collection-chain i{color:#546a75;font-style:normal}
+.collect-panel{padding:clamp(25px,3vw,38px);background:var(--panel);overflow:auto}.collect-panel>span{color:var(--cyan);font-size:10px;font-weight:900;letter-spacing:.18em}.collect-panel h3{margin:10px 0 8px;font-size:25px}.collect-panel>p{margin:0 0 22px;color:#aebdc5}
+.collect-fact,.collect-result,.collect-warning{margin-top:12px;padding:14px 15px;background:#172832;border-left:3px solid var(--cyan)}.collect-result{border-left-color:var(--lime)}.collect-warning{border-left-color:var(--amber);background:#29251c}.collect-fact b,.collect-result b,.collect-warning b{font-size:10px;letter-spacing:.08em;color:var(--cyan)}.collect-result b{color:var(--lime)}.collect-warning b{color:var(--amber)}.collect-fact p,.collect-result p,.collect-warning p{margin:6px 0 0;color:#d5dfe3;font-size:12px;line-height:1.55}
+.collect-actions{display:flex;gap:8px;margin-top:20px}.collect-actions button{flex:1;padding:11px;color:#fff;background:#1e303a;border:1px solid #38505c;border-radius:7px;cursor:pointer}.collect-actions button:last-child{color:#092029;background:var(--cyan);border-color:var(--cyan);font-weight:900}
+@keyframes mark-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@media(max-width:900px){.collect-stage{height:auto;grid-template-columns:1fr}.collect-image-wrap{height:58vw;min-height:300px}.collect-panel{min-height:420px}.collection-chain{justify-content:flex-start}}
+@media(max-width:560px){.collect-image-wrap{height:62vw;min-height:260px}.collect-toolbar{padding:10px}.collect-panel{padding:24px 20px}.collection-chain{padding:10px}.collection-chain i{display:none}}

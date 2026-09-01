@@ -6,6 +6,7 @@
   <meta name="description" content="이미지와 체험을 중심으로 구성한 FlowWork AutoCAD Add-on 사용 가이드">
   <title>FlowWork Visual Guide</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="collect.css">
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -16,6 +17,7 @@
     <nav class="mode-nav" aria-label="주요 학습 모드">
       <a href="#home" data-route="home">홈</a>
       <a href="#learn" data-route="learn">첫 작업 체험</a>
+      <a href="#collect" data-route="collect">수집 원리</a>
       <a href="#explore" data-route="explore">화면 탐색</a>
       <a href="#solve" data-route="solve">문제 해결</a>
     </nav>
@@ -26,8 +28,9 @@
     <div><b>원하는 방식으로 시작하세요</b><button type="button" id="drawer-close" aria-label="메뉴 닫기">×</button></div>
     <a href="#home"><span>01</span><b>FlowWork 한눈에 보기</b><small>무엇을 읽고 무엇을 해결하는지</small></a>
     <a href="#learn"><span>02</span><b>첫 작업 따라하기</b><small>실행부터 저장까지 화면으로 체험</small></a>
-    <a href="#explore"><span>03</span><b>화면을 직접 눌러보기</b><small>A~D와 도면 표시의 관계</small></a>
-    <a href="#solve"><span>04</span><b>문제에서 시작하기</b><small>증상을 골라 해결 순서 확인</small></a>
+    <a href="#collect"><span>03</span><b>도면에서 무엇을 읽는가</b><small>원본 문자부터 DETAIL 값까지</small></a>
+    <a href="#explore"><span>04</span><b>화면을 직접 눌러보기</b><small>A~D와 도면 표시의 관계</small></a>
+    <a href="#solve"><span>05</span><b>문제에서 시작하기</b><small>증상을 골라 해결 순서 확인</small></a>
   </aside>
 
   <main id="workspace">
@@ -64,6 +67,43 @@
         </aside>
       </div>
       <div class="step-dots" id="step-dots" aria-label="체험 단계"></div>
+    </section>
+
+    <section class="view collect-view" data-view="collect" hidden>
+      <div class="view-heading"><div><span>HOW DATA IS COLLECTED</span><h2>도면의 표기가 DETAIL 값이 되는 과정</h2></div><p>실제 화면 위 설명 레이어 · 항목을 눌러 비교</p></div>
+      <div class="collect-stage">
+        <div class="collect-visual">
+          <div class="collect-toolbar" id="collect-tabs" aria-label="수집 항목 선택">
+            <button type="button" data-collect="pipe" class="active">관로선</button>
+            <button type="button" data-collect="name">관번호</button>
+            <button type="button" data-collect="ground">지반고</button>
+            <button type="button" data-collect="invert">관저고</button>
+            <button type="button" data-collect="spec">관경·연장</button>
+          </div>
+          <div class="collect-image-wrap">
+            <img src="../manual/assets/images/FlowWork_direct_mapping_candidates.png" alt="FlowWork가 선택 관로와 관련 문자를 표시한 실제 AutoCAD 화면">
+            <div class="collect-mark mark-pipe active" data-mark="pipe" data-box="38,43,40,22"><span>선의 START → END</span></div>
+            <div class="collect-mark mark-name" data-mark="name" data-box="44,36,24,12"><span>관로선 주변 관번호</span></div>
+            <div class="collect-mark mark-ground ground-up" data-mark="ground" data-box="34,29,11,17.6"><span>START 지반고</span></div>
+            <div class="collect-mark mark-ground ground-down" data-mark="ground" data-box="73,46,11,17.6"><span>END 지반고</span></div>
+            <div class="collect-mark mark-invert invert-up" data-mark="invert" data-box="32,45,11,17.6"><span>START 관저고</span></div>
+            <div class="collect-mark mark-invert invert-down" data-mark="invert" data-box="72,58,11,17.6"><span>END 관저고</span></div>
+            <div class="collect-mark mark-spec" data-mark="spec" data-box="46,49,29,15"><span>관경·연장 문자</span></div>
+          </div>
+          <div class="collection-chain" aria-label="수집 처리 순서">
+            <span><b>1</b>설정 레이어</span><i>→</i><span><b>2</b>탐색 범위</span><i>→</i><span><b>3</b>가까운 유효 문자</span><i>→</i><span><b>4</b>DETAIL 값</span>
+          </div>
+        </div>
+        <aside class="collect-panel" aria-live="polite">
+          <span id="collect-kicker">PIPE GEOMETRY</span>
+          <h3 id="collect-title">관로선이 모든 수집의 기준입니다</h3>
+          <p id="collect-summary">설정된 관로선 레이어의 선을 읽고 시작점과 끝점을 노드로 만듭니다.</p>
+          <div class="collect-fact"><b>도면에서 찾는 것</b><p id="collect-source">설정된 관로선 레이어의 Polyline과 양 끝점</p></div>
+          <div class="collect-result"><b>DETAIL에 들어가는 값</b><p id="collect-result">START는 상류 필드, END는 하류 필드의 기준점이 됩니다.</p></div>
+          <div class="collect-warning"><b>꼭 알아두기</b><p id="collect-warning">방향은 높이값으로 자동 결정하지 않습니다. 현재 CAD 선의 시작점 → 끝점이 FlowWork의 START → END입니다.</p></div>
+          <div class="collect-actions"><button type="button" id="collect-prev">← 이전 항목</button><button type="button" id="collect-next">다음 항목 →</button></div>
+        </aside>
+      </div>
     </section>
 
     <section class="view explore-view" data-view="explore" hidden>

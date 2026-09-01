@@ -50,6 +50,29 @@ window.addEventListener('resize',positionLearnFocus);
 document.querySelector('#learn-prev').addEventListener('click',()=>selectLearn(learnIndex-1));
 document.querySelector('#learn-next').addEventListener('click',()=>{if(learnIndex===learnSteps.length-1)location.hash='solve';else selectLearn(learnIndex+1);});selectLearn(0);
 
+const collectItems=[
+  {key:'pipe',kicker:'PIPE GEOMETRY',title:'관로선이 모든 수집의 기준입니다',summary:'설정된 관로선 레이어의 선을 읽고 시작점과 끝점을 노드로 만듭니다.',source:'설정된 관로선 레이어의 Polyline과 양 끝점',result:'선의 START는 상류 필드, END는 하류 필드의 기준점이 됩니다.',warning:'방향은 높이값으로 자동 결정하지 않습니다. 현재 CAD 선의 시작점 → 끝점이 FlowWork의 START → END입니다.'},
+  {key:'name',kicker:'PIPE NAME',title:'관로선 주변에서 관번호를 찾습니다',summary:'관번호 레이어의 문자 중 관로선에 가까우면서 설정된 탐색 허용거리 안에 있는 후보를 비교합니다.',source:'관번호 레이어의 문자와 설정된 관번호 접두어',result:'인식한 문자열을 DETAIL의 관로번호로 연결합니다.',warning:'수동 지정한 M-NAME이 있으면 자동 거리 매칭보다 먼저 적용됩니다. 잘못 연결됐다면 원본 문자와 관로번호를 함께 확인하세요.'},
+  {key:'ground',kicker:'GROUND ELEVATION',title:'지반고는 관로 양 끝점에서 각각 찾습니다',summary:'START와 END 노드를 중심으로 지반고 레이어의 유효 문자를 찾고 가까운 후보를 배정합니다.',source:'지반고 레이어의 문자 · 기본 접두어 GH, G.H, EL · 설정된 검색 반경',result:'START 문자는 상류 지반고, END 문자는 하류 지반고에 들어갑니다.',warning:'괄호만 있는 문자는 지반고 후보에서 제외됩니다. 반경 밖이거나 파싱되지 않으면 0.00m와 지반고 누락 경고가 기록되며 M-GL로 직접 지정할 수 있습니다.'},
+  {key:'invert',kicker:'INVERT ELEVATION',title:'관저고도 START와 END에서 따로 수집합니다',summary:'관저고 레이어의 문자를 각 노드 주변에서 찾습니다. 실패하면 지반고 레이어의 복합 문자에서 괄호 안 값을 보조로 확인합니다.',source:'관저고 레이어의 INV, I 표기 또는 지반고 복합 문자의 괄호 값',result:'START 문자는 상류 관저고, END 문자는 하류 관저고에 들어갑니다.',warning:'누락 시 0.00m와 관저고 누락 경고가 기록됩니다. M-INV로 해당 끝점의 문자를 직접 지정한 뒤 재수집해 확인하세요.'},
+  {key:'spec',kicker:'DIAMETER & LENGTH',title:'관경과 연장은 관로선 주변 제원 문자에서 분리합니다',summary:'제원 레이어의 가까운 문자를 찾은 뒤 관경 접두어와 연장 접두어를 각각 해석합니다.',source:'HP·D·Ø 등의 관경 표기와 L=·L: 등의 연장 표기',result:'숫자를 분리해 DETAIL의 관경(mm)과 연장(m)에 각각 저장합니다.',warning:'연장을 읽지 못하면 CAD 선의 실측 길이를 임시 적용하고 경고합니다. 관경을 읽지 못하면 D600을 임시 적용하고 경고하므로 정상 수집값으로 오해하면 안 됩니다.'}
+];
+let collectIndex=0;
+function positionCollectMarks(){
+  const image=document.querySelector('.collect-image-wrap img');const host=image.parentElement;if(!image.naturalWidth||!host.clientWidth)return;
+  const imageRatio=image.naturalWidth/image.naturalHeight;const hostRatio=host.clientWidth/host.clientHeight;const width=hostRatio>imageRatio?host.clientHeight*imageRatio:host.clientWidth;const height=hostRatio>imageRatio?host.clientHeight:host.clientWidth/imageRatio;const offsetX=(host.clientWidth-width)/2;const offsetY=(host.clientHeight-height)/2;
+  document.querySelectorAll('[data-box]').forEach(mark=>{const [x,y,w,h]=mark.dataset.box.split(',').map(Number);mark.style.left=`${offsetX+width*x/100}px`;mark.style.top=`${offsetY+height*y/100}px`;mark.style.width=`${width*w/100}px`;mark.style.height=`${height*h/100}px`;});
+}
+function selectCollect(index){
+  collectIndex=(index+collectItems.length)%collectItems.length;const item=collectItems[collectIndex];
+  document.querySelectorAll('[data-collect]').forEach(button=>button.classList.toggle('active',button.dataset.collect===item.key));
+  document.querySelectorAll('[data-mark]').forEach(mark=>mark.classList.toggle('active',mark.dataset.mark===item.key));
+  document.querySelector('#collect-kicker').textContent=item.kicker;document.querySelector('#collect-title').textContent=item.title;document.querySelector('#collect-summary').textContent=item.summary;document.querySelector('#collect-source').textContent=item.source;document.querySelector('#collect-result').textContent=item.result;document.querySelector('#collect-warning').textContent=item.warning;
+}
+document.querySelectorAll('[data-collect]').forEach((button,index)=>button.addEventListener('click',()=>selectCollect(index)));
+document.querySelector('#collect-prev').addEventListener('click',()=>selectCollect(collectIndex-1));document.querySelector('#collect-next').addEventListener('click',()=>selectCollect(collectIndex+1));selectCollect(0);
+document.querySelector('.collect-image-wrap img').addEventListener('load',positionCollectMarks);window.addEventListener('resize',positionCollectMarks);positionCollectMarks();
+
 const areas=[
   {count:'A · START HERE',title:'도면 수집과 설정',summary:'현재 도면을 다시 읽고 작업을 시작하는 영역입니다.',action:'활성 도면을 확인하고 ‘도면 정보 수집’을 누르세요.',result:'수집이 끝나면 B의 수량과 C의 관로 목록, D의 상세 정보가 갱신됩니다.',detail:'도면이나 설정을 변경한 뒤에는 다시 수집해야 결과에 반영됩니다. 예상 관로 수가 크게 다르면 개별 오류보다 레이어 설정부터 확인하세요.'},
   {count:'B · FIRST CHECK',title:'수집 수량 먼저 판단',summary:'개별 문제를 보기 전에 수집 결과가 기대한 규모인지 확인합니다.',action:'총 관로 수를 도면의 예상 수량과 비교하세요.',result:'정상·경고 수를 보고 C에서 먼저 확인할 대상을 정할 수 있습니다.',detail:'오류 관로는 총 관로 수에 포함되지만 별도 오류 합계 카드가 없을 수 있습니다. C 목록의 빨간 상태 아이콘을 함께 확인하세요.'},
