@@ -16,23 +16,37 @@ document.querySelector('#drawer-close').addEventListener('click',()=>drawer.hidd
 drawer.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>drawer.hidden=true));
 
 const learnSteps=[
-  {kicker:'STEP 1 · 실행',title:'대상 도면에서 FlowWork 열기',body:'AutoCAD에서 작업할 DWG를 연 뒤 명령창에 FLOWWORK를 입력합니다.',action:'왼쪽에 FlowWork 팔레트가 열리는지 확인합니다.',check:'팔레트 상단의 현재 도면이 작업하려는 DWG와 같아야 합니다.',image:'../manual/assets/images/FlowWork_0116_centered.png',focus:['2%','12%','24%','17%'],label:'FLOWWORK 실행'},
-  {kicker:'STEP 2 · 수집',title:'현재 도면을 다시 읽기',body:'팔레트 상단의 ‘도면 정보 수집’을 눌러 관로선과 주변 문자를 분석합니다.',action:'수집이 끝날 때까지 도면을 전환하지 않습니다.',check:'총 관로 수가 예상 수량과 비슷한지 먼저 확인합니다.',image:'../manual/assets/images/FlowWork_0116_centered.png',focus:['2%','20%','24%','18%'],label:'도면 정보 수집'},
-  {kicker:'STEP 3 · 검증',title:'오류 관로부터 선택하기',body:'관로 목록에서 빨간 오류를 먼저, 노란 경고를 다음으로 선택합니다.',action:'선택한 관로번호와 도면 강조, DETAIL 제목이 같은지 봅니다.',check:'도면과 DETAIL이 동일한 한 관로를 가리키면 다음으로 진행합니다.',image:'../manual/assets/images/FlowWork_0116_centered.png',focus:['2%','38%','24%','29%'],label:'문제 관로 선택'},
-  {kicker:'STEP 4 · 수정',title:'원인을 확인한 뒤 수정 방법 선택',body:'DETAIL의 진단과 도면 표시를 비교해 매핑 오류인지 방향 오류인지 구분합니다.',action:'문자가 틀리면 수동 매핑, 값은 맞고 방향만 반대면 방향 변경을 검토합니다.',check:'수정 전·후 값과 도면의 원본 문자가 일치해야 합니다.',image:'../manual/assets/images/FlowWork_direct_mapping_candidates.png',focus:['3%','57%','29%','35%'],label:'진단 · 수정'},
-  {kicker:'STEP 5 · 저장',title:'재수집하고 결과 저장',body:'수정 후 도면을 다시 수집하고 오류와 경고를 재확인합니다.',action:'FlowWork 입력용 JSON 또는 검토용 CSV를 선택해 저장합니다.',check:'예상 관로 수, 설명되지 않은 오류, 표본 값과 저장 위치를 확인합니다.',image:'../manual/assets/images/FlowWork_menu_screen.png',focus:['2%','15%','25%','34%'],label:'결과 저장'}
+  {kicker:'STEP 1 · 실행',title:'대상 도면에서 FlowWork 열기',body:'AutoCAD에서 작업할 DWG를 연 뒤 명령창에 FLOWWORK를 입력합니다.',action:'왼쪽에 FlowWork 팔레트가 열리는지 확인합니다.',check:'팔레트 상단의 현재 도면이 작업하려는 DWG와 같아야 합니다.',image:'../manual/assets/images/FlowWork_0116_centered.png',focus:[0.7,13.5,22.3,9.2],label:'FLOWWORK 실행'},
+  {kicker:'STEP 2 · 수집',title:'현재 도면을 다시 읽기',body:'팔레트 상단의 ‘도면 정보 수집’을 눌러 관로선과 주변 문자를 분석합니다.',action:'수집이 끝날 때까지 도면을 전환하지 않습니다.',check:'총 관로 수가 예상 수량과 비슷한지 먼저 확인합니다.',image:'../manual/assets/images/FlowWork_0116_centered.png',focus:[1.4,20.1,20.8,3.3],label:'도면 정보 수집'},
+  {kicker:'STEP 3 · 검증',title:'오류 관로부터 선택하기',body:'관로 목록에서 빨간 오류를 먼저, 노란 경고를 다음으로 선택합니다.',action:'선택한 관로번호와 도면 강조, DETAIL 제목이 같은지 봅니다.',check:'도면과 DETAIL이 동일한 한 관로를 가리키면 다음으로 진행합니다.',image:'../manual/assets/images/FlowWork_0116_centered.png',focus:[1.4,29.7,20.8,21.2],label:'문제 관로 선택'},
+  {kicker:'STEP 4 · 수정',title:'원인을 확인한 뒤 수정 방법 선택',body:'DETAIL의 진단과 도면 표시를 비교해 매핑 오류인지 방향 오류인지 구분합니다.',action:'문자가 틀리면 수동 매핑, 값은 맞고 방향만 반대면 방향 변경을 검토합니다.',check:'수정 전·후 값과 도면의 원본 문자가 일치해야 합니다.',image:'../manual/assets/images/FlowWork_direct_mapping_candidates.png',focus:[1.4,52.4,20.8,36.5],label:'진단 · 수정'},
+  {kicker:'STEP 5 · 저장',title:'재수집하고 결과 저장',body:'수정 후 도면을 다시 수집하고 오류와 경고를 재확인합니다.',action:'FlowWork 입력용 JSON 또는 검토용 CSV를 선택해 저장합니다.',check:'예상 관로 수, 설명되지 않은 오류, 표본 값과 저장 위치를 확인합니다.',image:'../manual/assets/images/FlowWork_menu_screen.png',focus:[2,15,25,34],label:'결과 저장'}
 ];
 let learnIndex=0;
+let activeLearnFocus=learnSteps[0].focus;
 const dots=document.querySelector('#step-dots');
 learnSteps.forEach((_,index)=>{const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',`${index+1}단계`);button.addEventListener('click',()=>selectLearn(index));dots.append(button);});
+function positionLearnFocus(){
+  const image=document.querySelector('#learn-image');const focus=document.querySelector('#learn-focus');const host=image.parentElement;
+  if(!image.naturalWidth||!image.naturalHeight||!host.clientWidth||!host.clientHeight)return;
+  const imageRatio=image.naturalWidth/image.naturalHeight;const hostRatio=host.clientWidth/host.clientHeight;
+  const renderWidth=hostRatio>imageRatio?host.clientHeight*imageRatio:host.clientWidth;
+  const renderHeight=hostRatio>imageRatio?host.clientHeight:host.clientWidth/imageRatio;
+  const offsetX=(host.clientWidth-renderWidth)/2;const offsetY=(host.clientHeight-renderHeight)/2;
+  const [left,top,width,height]=activeLearnFocus;
+  focus.style.left=`${offsetX+renderWidth*left/100}px`;focus.style.top=`${offsetY+renderHeight*top/100}px`;
+  focus.style.width=`${renderWidth*width/100}px`;focus.style.height=`${renderHeight*height/100}px`;
+}
 function selectLearn(index){
   learnIndex=Math.max(0,Math.min(learnSteps.length-1,index));const step=learnSteps[learnIndex];
   document.querySelector('#learn-progress').textContent=`${learnIndex+1} / ${learnSteps.length}`;
   document.querySelector('#learn-kicker').textContent=step.kicker;document.querySelector('#learn-title').textContent=step.title;document.querySelector('#learn-body').textContent=step.body;document.querySelector('#learn-action').textContent=step.action;document.querySelector('#learn-check').textContent=step.check;document.querySelector('#learn-image').src=step.image;document.querySelector('#focus-label').textContent=step.label;
-  const focus=document.querySelector('#learn-focus');[focus.style.left,focus.style.top,focus.style.width,focus.style.height]=step.focus;
+  activeLearnFocus=step.focus;positionLearnFocus();
   [...dots.children].forEach((dot,i)=>dot.classList.toggle('active',i===learnIndex));
   document.querySelector('#learn-prev').disabled=learnIndex===0;document.querySelector('#learn-next').textContent=learnIndex===learnSteps.length-1?'문제 해결로 이동 →':'다음 단계 →';
 }
+document.querySelector('#learn-image').addEventListener('load',positionLearnFocus);
+window.addEventListener('resize',positionLearnFocus);
 document.querySelector('#learn-prev').addEventListener('click',()=>selectLearn(learnIndex-1));
 document.querySelector('#learn-next').addEventListener('click',()=>{if(learnIndex===learnSteps.length-1)location.hash='solve';else selectLearn(learnIndex+1);});selectLearn(0);
 
