@@ -88,4 +88,4 @@ document.querySelector('#detail-close').addEventListener('click',()=>detailSheet
 
 const lightbox=document.querySelector('#lightbox');document.querySelectorAll('[data-expand-image]').forEach(button=>button.addEventListener('click',()=>{document.querySelector('#lightbox-image').src=button.dataset.expandImage;lightbox.hidden=false;}));document.querySelector('#lightbox-close').addEventListener('click',()=>lightbox.hidden=true);lightbox.addEventListener('click',event=>{if(event.target===lightbox)lightbox.hidden=true;});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'){drawer.hidden=true;detailSheet.hidden=true;lightbox.hidden=true;}});
-document.querySelectorAll('[data-problem]').forEach(button=>button.addEventListener('click',()=>openDetail(button.querySelector('b').textContent,'이 문제의 실제 해결 체험은 다음 제작 구간에서 추가합니다. 원인 확인 → 실제 화면 대조 → 수정 선택 → 재수집 확인의 순서로 구성할 예정입니다.')));
+// 항목별 상세 작업 가이드는 guide.js에서 연결합니다.

@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="collect.css">
   <script src="app.js" defer></script>
+  <link rel="stylesheet" href="guide.css">
+  <script src="guide.js" defer></script>
 </head>
 <body>
   <a class="skip" href="#workspace">본문으로 이동</a>
@@ -134,7 +136,7 @@
         <button type="button" data-problem="count"><span>COUNT</span><b>관로 수가 너무 적어요</b><small>레이어와 수집 설정 먼저 점검</small></button>
         <button type="button" data-problem="joint"><span>JOINT</span><b>접점 거리가 멀다고 해요</b><small>도면 끝점과 연결 상태 확인</small></button>
       </div>
-      <div class="problem-preview"><div><span>다음 제작 구간</span><h3>문제를 선택하면 실제 화면 중심 해결 체험이 시작됩니다.</h3><p>각 시나리오는 판단 질문 → 실제 화면 확인 → 수정 기능 선택 → 재수집 확인 순서로 구성합니다.</p></div><a href="#learn">먼저 기본 작업 체험하기</a></div>
+      <div class="problem-preview"><div><span>확인 → 조치 → 결과</span><h3>증상을 선택해 확인 순서를 따라가세요.</h3><p>원본 문자와 진단 메시지를 대조한 뒤 수정 방법을 결정합니다.</p></div><a href="#operations">설정·수정·저장 안내</a></div>
     </section>
   </main>
 
@@ -144,6 +146,6 @@
     <div id="detail-content"><p>기본 화면은 이미지와 체험에 집중합니다. 용어, 판단 기준과 주의사항은 선택한 기능에 맞춰 이곳에 표시됩니다.</p></div>
   </aside>
 
-  <div class="lightbox" id="lightbox" hidden><button type="button" id="lightbox-close" aria-label="확대 이미지 닫기">×</button><img id="lightbox-image" alt="확대된 FlowWork 실제 화면"><p>실제 FlowWork 화면 · 마우스 휠 또는 터치 확대는 다음 단계에서 추가됩니다.</p></div>
+  <div class="lightbox" id="lightbox" hidden><button type="button" id="lightbox-close" aria-label="확대 이미지 닫기">×</button><img id="lightbox-image" alt="확대된 FlowWork 실제 화면"><p>실제 FlowWork 화면 · 닫기: × 또는 Esc</p></div>
 </body>
 </html>
